@@ -1,11 +1,9 @@
-import { IMeta } from "@/types/globalType";
-import { createApi } from "@reduxjs/toolkit/query";
 import type { BaseQueryFn } from "@reduxjs/toolkit/query";
-import axios from "axios";
 import type { AxiosRequestConfig, AxiosError } from "axios";
-import { instance } from "./axiosInstance";
+import { instance as axiosInstance } from "./axiosInstance";
+import { IMeta } from "@/types/globalType";
 
-const axiosBaseQuery =
+export const axiosBaseQuery =
   (
     { baseUrl }: { baseUrl: string } = { baseUrl: "" }
   ): BaseQueryFn<
@@ -14,16 +12,23 @@ const axiosBaseQuery =
       method: AxiosRequestConfig["method"];
       data?: AxiosRequestConfig["data"];
       params?: AxiosRequestConfig["params"];
-      headers?: AxiosRequestConfig["headers"];
       meta?: IMeta;
       contentType?: string;
+      withCredentials?: boolean;
     },
     unknown,
     unknown
   > =>
-  async ({ url, method, data, params, contentType }) => {
+  async ({
+    url,
+    method,
+    data,
+    params,
+    contentType,
+    withCredentials = true,
+  }) => {
     try {
-      const result = await instance({
+      const result = await axiosInstance({
         url: baseUrl + url,
         method,
         data,
@@ -31,18 +36,26 @@ const axiosBaseQuery =
         headers: {
           "Content-Type": contentType || "application/json",
         },
+        withCredentials,
       });
-      //   return { data: result.data };
-      //TODO: check result by console when start coding
       return result;
     } catch (axiosError) {
-      const err = axiosError as AxiosError;
+      let err = axiosError as AxiosError & {
+        statusCode: number;
+        message: string;
+        success: boolean;
+        errorMessages: Array<any>;
+      };
+
+      const error = {
+        status: err.response?.status || err?.statusCode || 400,
+        data: err.response?.data || err.message,
+        message: err.response?.data || err.message,
+        success: err?.success,
+        errorMessages: err?.errorMessages,
+      };
       return {
-        error: {
-          status: err.response?.status,
-          data: err.response?.data || err.message,
-        },
+        error: error,
       };
     }
   };
-export default axiosBaseQuery;
