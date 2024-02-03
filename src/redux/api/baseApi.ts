@@ -5,7 +5,9 @@ import { axiosBaseQuery } from "@/axios/axiosBaseQuery";
 
 export const baseApi = createApi({
   reducerPath: "api",
-  baseQuery: axiosBaseQuery({ baseUrl: getBaseUrl() }),
+  baseQuery: axiosBaseQuery({
+    baseUrl: "https://bank-management-backend.vercel.app/api/v1",
+  }),
   endpoints: () => ({}),
   tagTypes: tagTypeList,
 });
