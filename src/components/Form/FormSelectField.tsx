@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import { Select } from "antd";
 import { Controller, useFormContext } from "react-hook-form";
-import { getErrorMessageByPathname } from "@/utils/schemaValidation";
 type ISelectOptions = {
   label: string;
   value: string;
@@ -29,7 +28,6 @@ const FormSelectField = ({
     control,
     formState: { errors },
   } = useFormContext();
-  const errorMessages = getErrorMessageByPathname(errors, name);
   return (
     <>
       {label ? label : null}
@@ -51,7 +49,6 @@ const FormSelectField = ({
           />
         )}
       />
-      <small style={{ color: "red" }}>{errorMessages}</small>
     </>
   );
 };

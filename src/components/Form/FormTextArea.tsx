@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import { Input } from "antd";
 import { Controller, useFormContext } from "react-hook-form";
-import { getErrorMessageByPathname } from "@/utils/schemaValidation";
 interface IInput {
   name: string;
   placeHolder?: string;
@@ -21,7 +20,6 @@ const FormTextArea = ({
     control,
     formState: { errors },
   } = useFormContext();
-  const errorMessages = getErrorMessageByPathname(errors, name);
   return (
     <>
       {label ? label : null}
@@ -41,7 +39,6 @@ const FormTextArea = ({
           />
         )}
       />
-      <small style={{ color: "red" }}>{errorMessages}</small>
     </>
   );
 };
