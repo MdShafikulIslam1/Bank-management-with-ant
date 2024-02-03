@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { storeUserInfo } from "@/service/authentication.service";
 import logo from "@/assests/images/bank.png";
 import { useCallback, useState } from "react";
+import { useLoginMutation } from "@/redux/api/authApi";
 
 interface IFormValues {
   id: string;
@@ -19,6 +20,8 @@ type Variant = "LOGIN" | "REGISTER";
 
 const LoginPage = () => {
   const [variant, setVariant] = useState<Variant>("LOGIN");
+
+  const [userLogin] = useLoginMutation();
 
   const router = useRouter();
 
@@ -31,15 +34,14 @@ const LoginPage = () => {
   }, [variant]);
   const onSubmit: SubmitHandler<IFormValues> = async (data: any) => {
     try {
-      console.log("login data", data);
-      // const res = await userLogin({ ...data }).unwrap();
-      // if (res?.accessToken) {
-      //   message.success("User logged in successfully");
-      //   router.push("/profile");
-      // }
-      // storeUserInfo({ accessToken: res?.accessToken });
+      const res = await userLogin({ ...data }).unwrap();
+      if (res?.data) {
+        message.success("User logged in successfully");
+        router.push("/profile");
+        storeUserInfo({ accessToken: res?.data });
+      }
     } catch (error: any) {
-      console.error(error.message);
+      message.error(error.message);
     }
   };
   return (
@@ -63,6 +65,7 @@ const LoginPage = () => {
             <Form submitHandler={onSubmit}>
               <div>
                 <FormInput
+                  required={true}
                   name="user_name"
                   type="text"
                   label="User Name"
@@ -75,6 +78,7 @@ const LoginPage = () => {
 
               <div className="my-3">
                 <FormInput
+                  required={true}
                   name="password"
                   type="password"
                   label="User Password"

@@ -13,6 +13,7 @@ interface IInput {
   label?: string;
   prefix?: ReactNode;
   allowClear?: boolean;
+  required?: boolean;
 }
 
 const FormInput = ({
@@ -26,6 +27,7 @@ const FormInput = ({
   label,
   prefix,
   allowClear,
+  required,
 }: IInput) => {
   const {
     control,
@@ -41,6 +43,7 @@ const FormInput = ({
         render={({ field }) =>
           type === "password" ? (
             <Input.Password
+              required={required}
               type={type}
               size={size}
               {...field}
@@ -51,6 +54,7 @@ const FormInput = ({
             />
           ) : (
             <Input
+            required={required}
               type={type}
               size={size}
               {...field}
