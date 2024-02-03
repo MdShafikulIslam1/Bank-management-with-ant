@@ -1,7 +1,7 @@
 "use client";
 import { UserOutlined } from "@ant-design/icons";
 import { SubmitHandler } from "react-hook-form";
-import { Row, Col, Button, message } from "antd";
+import { Row, Col, Button, message, Modal } from "antd";
 import Image from "next/image";
 import loginImage from "../../assests/images/login-image.png";
 import Form from "@/components/Form/Form";
@@ -9,29 +9,22 @@ import FormInput from "@/components/Form/FormInput";
 import { useRouter } from "next/navigation";
 import { storeUserInfo } from "@/service/authentication.service";
 import logo from "@/assests/images/bank.png";
-import { useCallback, useState } from "react";
 import { useLoginMutation } from "@/redux/api/authApi";
+import Link from "next/link";
+import { useState } from "react";
+import ModalUi from "../ui/ModalUi";
+import CreateAccountForm from "../Form/CreateAccountForm";
 
 interface IFormValues {
   id: string;
   password: string;
 }
-type Variant = "LOGIN" | "REGISTER";
 
 const LoginPage = () => {
-  const [variant, setVariant] = useState<Variant>("LOGIN");
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [userLogin] = useLoginMutation();
 
   const router = useRouter();
-
-  const toggleVariant = useCallback(() => {
-    if (variant === "LOGIN") {
-      setVariant("REGISTER");
-    } else {
-      setVariant("LOGIN");
-    }
-  }, [variant]);
   const onSubmit: SubmitHandler<IFormValues> = async (data: any) => {
     try {
       const res = await userLogin({ ...data }).unwrap();
@@ -115,16 +108,20 @@ const LoginPage = () => {
               </div>
             </div>
             <div className="mt-6 flex justify-center gap-2 px-2 text-gray-500 ">
-              <div>
-                {variant === "LOGIN"
-                  ? "New to Bangladesh Bank ?"
-                  : "Already have an account"}
-              </div>
-              <div
-                className="cursor-pointer underline text-primary"
-                onClick={toggleVariant}
-              >
-                {variant === "LOGIN" ? "Create a new account" : "Login"}
+              <div>New to Bangladesh Bank ?</div>
+              <div className="cursor-pointer underline text-primary">
+                <p onClick={() => setIsModalOpen(true)}>Create an Account</p>
+                <ModalUi
+                  isOpen={isModalOpen}
+                  showOkButton={false}
+                  showCancelButton={false}
+                  closeModal={() => setIsModalOpen(false)}
+                >
+                  <CreateAccountForm
+                    isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                  />
+                </ModalUi>
               </div>
             </div>
           </div>
