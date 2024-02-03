@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, message, Steps, theme } from "antd";
 import { FormProvider, useForm } from "react-hook-form";
-import { getFromLocalStorage, setLocalStorage } from "@/utils/local-Storage";
 import { useRouter } from "next/navigation";
+import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-Storage";
 
 interface IStepperSteps {
   title: string;
@@ -21,7 +21,7 @@ const StepperForm = ({ steps, submitHandler, navigateLink }: IStepProps) => {
       : 0
   );
   useEffect(() => {
-    setLocalStorage("step", JSON.stringify({ step: current }));
+    setToLocalStorage("step", JSON.stringify({ step: current }));
   }, [current]);
 
   const next = () => {
@@ -39,7 +39,7 @@ const StepperForm = ({ steps, submitHandler, navigateLink }: IStepProps) => {
   const handleStepperFormSubmit = (data: any) => {
     submitHandler(data);
     reset();
-    setLocalStorage("step", JSON.stringify({ step: 0 }));
+    setToLocalStorage("step", JSON.stringify({ step: 0 }));
     navigateLink && router.push(navigateLink);
   };
 
