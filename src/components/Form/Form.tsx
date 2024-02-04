@@ -23,7 +23,6 @@ const Form = ({
   const methods = useForm<FormProps>(formConfig);
   const { handleSubmit, reset } = methods;
   const onSubmit = (data: any) => {
-    console.log("inside form compoet", data);
     submitHandler(data);
     reset();
   };

@@ -1,20 +1,17 @@
 "use client";
 import { UserOutlined } from "@ant-design/icons";
 import { SubmitHandler } from "react-hook-form";
-import { Button, message, Modal } from "antd";
+import { Button, message } from "antd";
 import Image from "next/image";
 import Form from "@/components/Form/Form";
 import FormInput from "@/components/Form/FormInput";
 import { useRouter } from "next/navigation";
-import { storeUserInfo } from "@/service/authentication.service";
 import logo from "@/assests/images/bank.png";
-import {
-  useCreateAccountMutation,
-  useLoginMutation,
-} from "@/redux/api/authApi";
+import { useCreateAccountMutation } from "@/redux/api/authApi";
 import { CldUploadButton } from "next-cloudinary";
-import { HiPhoto } from "react-icons/hi2";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import FormSelectField from "./FormSelectField";
+import { bankTypeOptions } from "@/constant/global";
 
 interface IFormValues {
   id: string;
@@ -28,7 +25,7 @@ const CreateAccountForm = ({
   setIsModalOpen: (e: boolean) => void;
   isModalOpen: boolean;
 }) => {
-  const [image, setImage] = useState("/default_avatar.png");
+  const [image, setImage] = useState();
   const [createAccount] = useCreateAccountMutation();
 
   const router = useRouter();
@@ -42,35 +39,37 @@ const CreateAccountForm = ({
       return message.error("Password does not match");
     }
     delete data.confirm_password;
-    data.profile_image = image;
+    if (image) {
+      data.profile_image = image;
+    }
+    console.log("account data", data);
     try {
       const res = await createAccount({ ...data }).unwrap();
       if (res?.success) {
         message.success(res?.message);
         router.push("/profile");
+        setIsModalOpen(false);
       }
     } catch (error: any) {
       message.error(error.message);
-    } finally {
-      setIsModalOpen(false);
     }
   };
   return (
-    <div>
-      <div className="w-full flex justify-center items-center">
+    <div className="w-full flex justify-center items-center">
+      <div>
+        <Image
+          src={logo}
+          alt="messenger logo"
+          height={60}
+          width={60}
+          className="mx-auto w-auto"
+        />
+        <h1 className="text-primary text-2xl font-bold my-4 text-center ">
+          Create Account
+        </h1>
         <div>
-          <Image
-            src={logo}
-            alt="messenger logo"
-            height={60}
-            width={60}
-            className="mx-auto w-auto"
-          />
-          <h1 className="text-primary text-2xl font-bold my-4 text-center ">
-            Create Account
-          </h1>
-          <div>
-            <Form submitHandler={onSubmit}>
+          <Form submitHandler={onSubmit}>
+            <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <FormInput
                   required={true}
@@ -84,7 +83,7 @@ const CreateAccountForm = ({
                 />
               </div>
 
-              <div className="my-3">
+              <div className="">
                 <FormInput
                   required={true}
                   name="user_name"
@@ -94,7 +93,7 @@ const CreateAccountForm = ({
                   size="large"
                 />
               </div>
-              <div className="my-3">
+              <div className="">
                 <FormInput
                   required={true}
                   name="email"
@@ -104,7 +103,7 @@ const CreateAccountForm = ({
                   size="large"
                 />
               </div>
-              <div className="my-3">
+              <div className="">
                 <FormInput
                   required={true}
                   name="password"
@@ -114,7 +113,7 @@ const CreateAccountForm = ({
                   size="large"
                 />
               </div>
-              <div className="my-3">
+              <div className="">
                 <FormInput
                   required={true}
                   name="confirm_password"
@@ -124,7 +123,7 @@ const CreateAccountForm = ({
                   size="large"
                 />
               </div>
-              <div className="my-3">
+              <div className="">
                 <FormInput
                   required={true}
                   name="primary_phone_number"
@@ -134,7 +133,26 @@ const CreateAccountForm = ({
                   size="large"
                 />
               </div>
-              <div className="h-20 w-full my-3 flex items-center gap-4">
+              <div className="">
+                <FormInput
+                  required={true}
+                  name="address"
+                  type="text"
+                  label="Address"
+                  placeHolder="Enter your address"
+                  size="large"
+                />
+              </div>
+              <div className="">
+                <FormSelectField
+                  options={bankTypeOptions}
+                  name="account_type"
+                  size="large"
+                  label="Account Type"
+                  defaultValue="SAVINGS_ACCOUNT"
+                />
+              </div>
+              <div className="h-20 w-full  flex items-center gap-4">
                 <Image
                   src={image || "/default_avatar.png"}
                   alt="default avatar"
@@ -151,17 +169,17 @@ const CreateAccountForm = ({
                   </CldUploadButton>
                 </div>
               </div>
-              <Button
-                className="font-bold bg-primary"
-                block
-                color="primary"
-                type="primary"
-                htmlType="submit"
-              >
-                Submit
-              </Button>
-            </Form>
-          </div>
+            </div>
+            <Button
+              className="font-bold bg-primary mt-3"
+              block
+              color="primary"
+              type="primary"
+              htmlType="submit"
+            >
+              Submit
+            </Button>
+          </Form>
         </div>
       </div>
     </div>
