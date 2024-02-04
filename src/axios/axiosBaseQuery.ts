@@ -2,10 +2,11 @@ import type { BaseQueryFn } from "@reduxjs/toolkit/query";
 import type { AxiosRequestConfig, AxiosError } from "axios";
 import { instance as axiosInstance } from "./axiosInstance";
 import { IMeta } from "@/types/globalType";
+import getBaseUrl from "@/helpers/config/envConfig";
 
 export const axiosBaseQuery =
   (
-    { baseUrl }: { baseUrl: string } = { baseUrl: "" }
+    { baseUrl }: { baseUrl: string } = { baseUrl: getBaseUrl() as string }
   ): BaseQueryFn<
     {
       url: string;
