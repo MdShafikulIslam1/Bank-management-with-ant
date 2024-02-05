@@ -47,8 +47,8 @@ const LoginPage = () => {
           <Image
             src={logo}
             alt="messenger logo"
-            height={100}
-            width={100}
+            height={80}
+            width={80}
             className="mx-auto w-auto"
           />
           <h1 className="text-primary text-2xl font-bold my-4 text-center ">
@@ -81,9 +81,12 @@ const LoginPage = () => {
               </div>
 
               <div className="flex justify-end mb-2">
-                <span className="underline text-primary text-end cursor-pointer">
+                <Link
+                  href={"/forgot-password"}
+                  className="underline text-primary text-end cursor-pointer"
+                >
                   Forgot Password ?
-                </span>
+                </Link>
               </div>
               <Button
                 className="font-bold"
