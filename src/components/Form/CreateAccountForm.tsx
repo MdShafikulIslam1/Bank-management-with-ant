@@ -12,19 +12,17 @@ import { CldUploadButton } from "next-cloudinary";
 import { useState } from "react";
 import FormSelectField from "./FormSelectField";
 import { bankTypeOptions } from "@/constant/global";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { setOpen } from "@/redux/feature/modal/modalSlice";
 
 interface IFormValues {
   id: string;
   password: string;
 }
 
-const CreateAccountForm = ({
-  setIsModalOpen,
-  isModalOpen,
-}: {
-  setIsModalOpen: (e: boolean) => void;
-  isModalOpen: boolean;
-}) => {
+const CreateAccountForm = () => {
+  const open = useAppSelector((state) => state.modal.open);
+  const dispatch = useAppDispatch();
   const [image, setImage] = useState();
   const [createAccount] = useCreateAccountMutation();
 
@@ -48,7 +46,7 @@ const CreateAccountForm = ({
       if (res?.success) {
         message.success(res?.message);
         router.push("/profile");
-        setIsModalOpen(false);
+        dispatch(setOpen(false));
       }
     } catch (error: any) {
       message.error(error.message);

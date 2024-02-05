@@ -4,6 +4,7 @@ import Form from "@/components/Form/Form";
 import FormInput from "@/components/Form/FormInput";
 import { useResetPasswordMutation } from "@/redux/api/authApi";
 import { Button, message } from "antd";
+import { useRouter } from "next/navigation";
 import { SubmitHandler } from "react-hook-form";
 
 interface FieldValues {
@@ -12,6 +13,7 @@ interface FieldValues {
 }
 
 const ResetPassword = ({ searchParams }: any) => {
+  const router = useRouter();
   const { email, token } = searchParams;
   const [resetPassword] = useResetPasswordMutation();
 
@@ -31,8 +33,9 @@ const ResetPassword = ({ searchParams }: any) => {
       }).unwrap();
       if (res.success) {
         message.success(res.message);
+        router.push("/login");
       }
-      console.log(res);
+      
     } catch (error) {
       console.log(error);
     }

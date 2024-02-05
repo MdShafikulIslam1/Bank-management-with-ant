@@ -24,6 +24,7 @@ import {
   FaExchangeAlt,
   FaEye,
   FaHandHoldingUsd,
+  FaHistory,
   FaHome,
   FaKey,
   FaSignOutAlt,
@@ -36,7 +37,7 @@ import {
 } from "react-icons/md";
 
 export const sidebarItems = (role: string) => {
-  const className = "text-xl font-semibold";
+  const className = "text-base font-semibold hover:bg-primary hover:text-white";
   //............default.......................
   const defaultSidebarItems: MenuProps["items"] = [
     {
@@ -45,7 +46,7 @@ export const sidebarItems = (role: string) => {
           Home
         </Link>
       ),
-      icon: <FaHome size={20} />,
+      icon: <FaHome size={16} />,
       key: `/${role}/overview`,
     },
     {
@@ -54,7 +55,7 @@ export const sidebarItems = (role: string) => {
           Overview
         </Link>
       ),
-      icon: <FaEye size={20} />,
+      icon: <FaEye size={16} />,
       key: `overview`,
     },
     {
@@ -63,7 +64,7 @@ export const sidebarItems = (role: string) => {
           Deposit
         </Link>
       ),
-      icon: <MdAccountBalanceWallet size={20} />,
+      icon: <MdAccountBalanceWallet size={16} />,
       key: "deposit",
     },
     {
@@ -72,7 +73,7 @@ export const sidebarItems = (role: string) => {
           Withdraw
         </Link>
       ),
-      icon: <MdMoneyOff size={20} />,
+      icon: <MdMoneyOff size={16} />,
       key: "withdraw",
     },
     {
@@ -81,7 +82,7 @@ export const sidebarItems = (role: string) => {
           Transfer Money
         </Link>
       ),
-      icon: <FaExchangeAlt size={20} />,
+      icon: <FaExchangeAlt size={16} />,
       key: "transfer-money",
     },
     {
@@ -90,8 +91,17 @@ export const sidebarItems = (role: string) => {
           Loan
         </Link>
       ),
-      icon: <FaHandHoldingUsd size={20} />,
+      icon: <FaHandHoldingUsd size={16} />,
       key: "loan",
+    },
+    {
+      label: (
+        <Link href={`/loan`} className={className}>
+         Transaction History
+        </Link>
+      ),
+      icon: <FaHistory size={16} />,
+      key: "transaction-history",
     },
     {
       label: (
@@ -99,13 +109,13 @@ export const sidebarItems = (role: string) => {
           Card
         </Link>
       ),
-      icon: <FaCreditCard size={20} />,
+      icon: <FaCreditCard size={16} />,
       key: "card",
     },
     {
       label: <span className={className}>Setting</span>,
       key: "settings",
-      icon: <FaCog size={20} />,
+      icon: <FaCog size={16} />,
       children: [
         {
           label: (
@@ -114,7 +124,7 @@ export const sidebarItems = (role: string) => {
             </Link>
           ),
           key: "profile",
-          icon: <FaUser size={20} />,
+          icon: <FaUser size={16} />,
         },
         {
           label: (
@@ -133,7 +143,7 @@ export const sidebarItems = (role: string) => {
           Logout
         </Link>
       ),
-      icon: <FaSignOutAlt size={20} />,
+      icon: <FaSignOutAlt size={16} />,
       key: "logout",
     },
   ];

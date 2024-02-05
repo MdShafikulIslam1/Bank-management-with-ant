@@ -14,6 +14,8 @@ import Link from "next/link";
 import { useState } from "react";
 import ModalUi from "../ui/ModalUi";
 import CreateAccountForm from "../Form/CreateAccountForm";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { setOpen } from "@/redux/feature/modal/modalSlice";
 
 interface IFormValues {
   id: string;
@@ -21,7 +23,8 @@ interface IFormValues {
 }
 
 const LoginPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const open = useAppSelector((state) => state.modal.open);
+  const dispatch = useAppDispatch();
   const [userLogin] = useLoginMutation();
 
   const router = useRouter();
@@ -113,17 +116,13 @@ const LoginPage = () => {
             <div className="mt-6 flex justify-center gap-2 px-2 text-gray-500 ">
               <div>New to Bangladesh Bank ?</div>
               <div className="cursor-pointer underline text-primary">
-                <p onClick={() => setIsModalOpen(true)}>Create an Account</p>
+                <p onClick={() => dispatch(setOpen(true))}>Create an Account</p>
                 <ModalUi
-                  isOpen={isModalOpen}
+                  isOpen={open}
                   showOkButton={false}
                   showCancelButton={false}
-                  closeModal={() => setIsModalOpen(false)}
                 >
-                  <CreateAccountForm
-                    isModalOpen={isModalOpen}
-                    setIsModalOpen={setIsModalOpen}
-                  />
+                  <CreateAccountForm />
                 </ModalUi>
               </div>
             </div>
